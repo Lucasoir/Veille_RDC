@@ -15,8 +15,12 @@ SOURCES = [
         "name": "Human Rights Watch",
         "url": "https://www.hrw.org/rss/news"
     },
+    {
+        "name": "ONU Info",
+        "url": "https://news.un.org/feed/subscribe/fr/news/topic/peace-and-security/feed/rss.xml"
+    },
 ]
-KEYWORDS = ["Congo", "DRC", "RDC", "Kivu", "M23", "ADF", "FARDC"]
+KEYWORDS = ["Congo", "DRC", "RDC", "Kivu", "M23", "ADF", "FARDC", "MONUSCO"]
 SEEN_FILE = "seen_articles.json"
 
 EMAIL_FROM = "luca.alu1512@gmail.com"   # ← remplace ici
