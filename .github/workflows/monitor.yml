@@ -1,0 +1,32 @@
+name: Surveiller Amnesty RDC
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # vérification toutes les 6 heures
+  workflow_dispatch:          # permet aussi de lancer manuellement
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installer les dépendances
+        run: pip install feedparser
+
+      - name: Lancer la vérification
+        run: python monitor_amnesty.py
+        env:
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+
+      - name: Sauvegarder la liste des articles vus
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "mise à jour seen_articles.json"
+          file_pattern: seen_articles.json
