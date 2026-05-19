@@ -20,15 +20,15 @@ SOURCES = [
         "url": "https://news.un.org/feed/subscribe/fr/news/topic/peace-and-security/feed/rss.xml"
     },
 ]
-KEYWORDS = ["Congo", "DRC", "RDC", "Kivu", "M23", "ADF", "FARDC", "MONUSCO"]
-SEEN_FILE = "seen_articles.json"
 
-EMAIL_FROM = "luca.alu1512@gmail.com"   # ← remplace ici
-EMAIL_TO   = "luca.alu@lesoir.com"   # ← et ici
+KEYWORDS = ["Congo", "DRC", "RDC", "Kivu", "M23", "ADF", "FARDC", "MONUSCO"]
+
+SEEN_FILE  = "seen_articles.json"
+EMAIL_FROM = "luca.alu1512@gmail.com"
+EMAIL_TO   = "luca.alu@lesoir.com"
 SMTP_HOST  = "smtp.gmail.com"
 SMTP_PORT  = 587
-env:
-  SMTP_PASS: ${{ secrets.SMTP_PASS }}
+SMTP_PASS  = os.environ.get("SMTP_PASS")  # injecté via GitHub Secrets
 
 # --- FONCTIONS ---
 def load_seen():
@@ -46,6 +46,7 @@ def send_email(title, link, summary, source_name):
     msg["Subject"] = f"🔔 {source_name} – Nouveau rapport RDC : {title}"
     msg["From"]    = EMAIL_FROM
     msg["To"]      = EMAIL_TO
+
     body = f"""
     <h2>{title}</h2>
     <p><strong>Source :</strong> {source_name}</p>
@@ -53,6 +54,7 @@ def send_email(title, link, summary, source_name):
     <p><a href="{link}">Lire le rapport complet →</a></p>
     """
     msg.attach(MIMEText(body, "html"))
+
     with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
         s.starttls()
         s.login(EMAIL_FROM, SMTP_PASS)
@@ -62,9 +64,11 @@ def send_email(title, link, summary, source_name):
 def check_feed():
     seen     = load_seen()
     new_seen = set(seen)
+
     for source in SOURCES:
         print(f"🔍 Vérification : {source['name']}")
         feed = feedparser.parse(source["url"])
+
         for entry in feed.entries:
             if entry.link in seen:
                 continue
@@ -72,6 +76,7 @@ def check_feed():
             if any(kw.lower() in text for kw in KEYWORDS):
                 send_email(entry.title, entry.link, entry.get("summary", ""), source["name"])
             new_seen.add(entry.link)
+
     save_seen(new_seen)
 
 if __name__ == "__main__":
