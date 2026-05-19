@@ -27,7 +27,8 @@ EMAIL_FROM = "luca.alu1512@gmail.com"   # ← remplace ici
 EMAIL_TO   = "luca.alu@lesoir.com"   # ← et ici
 SMTP_HOST  = "smtp.gmail.com"
 SMTP_PORT  = 587
-SMTP_PASS  = os.environ["EMAIL_PASSWORD"]
+env:
+  SMTP_PASS: ${{ secrets.SMTP_PASS }}
 
 # --- FONCTIONS ---
 def load_seen():
