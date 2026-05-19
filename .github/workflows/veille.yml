@@ -1,0 +1,22 @@
+name: Veille RDC
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # chaque jour à 8h UTC
+  workflow_dispatch:      # permet de lancer manuellement
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    env:
+      SMTP_PASS: ${{ secrets.AMNESTY_VEILLE_RDC }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Installer les dépendances
+        run: pip install feedparser
+
+      - name: Lancer la vérification
+        run: python monitor_amnesty.py
