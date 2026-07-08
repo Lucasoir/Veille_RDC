@@ -25,7 +25,7 @@ KEYWORDS = ["Congo", "DRC", "RDC", "Kivu", "M23", "ADF", "FARDC", "MONUSCO"]
 
 SEEN_FILE  = "seen_articles.json"
 EMAIL_FROM = "luca.alu1512@gmail.com"
-EMAIL_TO   = "luca.alu@lesoir.com"
+EMAIL_TO   = "luca.alu@lesoir.be"
 SMTP_HOST  = "smtp.gmail.com"
 SMTP_PORT  = 587
 SMTP_PASS  = os.environ.get("SMTP_PASS")  # injecté via GitHub Secrets
